@@ -30,16 +30,17 @@ def loss_derivative(output, activated_weighted_sum):
 
 
 # Plot
-def plot(x, y, net, marker, color):
+def plot(x, y, pred, marker, color, save=False):
     markers = ['o', '^']
     colours = ['k', 'r']
     sns.scatterplot(x=x[:, 0], y=y[:, 0], alpha=1,
                     **{'marker': markers[marker], 'color': colours[color], 'label': 'Target'})
-    plt.plot(X, net, 'k', alpha=0.7, label="Regression line")
+    plt.plot(X, pred, 'k', alpha=0.7, label="Regression line")
     plt.xlabel('Input')
     plt.ylabel('Sine function')
     plt.legend()
-    plt.savefig('Plot/{}.png'.format(epochs))
+    if save:
+        plt.savefig('Plot/{}.png'.format(epochs))
     if epochs == n:
         plt.show()
     plt.close()
@@ -61,7 +62,7 @@ W = (0.2 * np.random.random((1, 1))) - 1
 print("X", X.shape, "\nY", Y.shape, "\nW", W.shape)
 
 # Epochs
-n = 1000
+n = 100
 
 # Activation function hyp or sigmoid
 activation = hyp
@@ -77,11 +78,10 @@ for epochs in range(n+1):
     # print("\nOutput at " + str(epochs) + "th epoch:" + "\n", o)
 
     # Saves regression line plot at each epoch and only shows the final plot
-    # plot(X, Y, o, 0, 1)
+    plot(X, Y, o, 0, 1, save=False)
 
     # Results
     if epochs == n:
-        plot(X, Y, o, 0, 1)
         print("Mean absolute percentage error: ", np.mean(abs(Y-o)*100), "%")
         print("Output:\n", DataFrame(Y).iloc[15:25, :])
         print("\nPrediction:\n", DataFrame(o).iloc[15:25, :])
